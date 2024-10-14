@@ -1238,6 +1238,9 @@ protected:
 protected:
 	void MouseClickAction() override
 	{
+		if(m_ZoneTypeAssetPath.IsNull())
+			return;
+
 		Context()->DisplayPopup(new CPopup(m_pAssetsEditor, m_IndexMember, m_ZoneTypeAssetPath, m_DrawRect));
 	}
 };
@@ -1254,11 +1257,6 @@ void CZoneTypeEdit::Update(bool ParentEnabled)
 {
 	if(IsEnabled() && ParentEnabled)
 	{
-		if(!AssetsManager()->IsValidPackage(m_pAssetsEditor->GetEditedPackageId()) || AssetsManager()->IsReadOnlyPackage(m_pAssetsEditor->GetEditedPackageId()))
-			Editable(false);
-		else
-			Editable(true);
-
 		int Index = m_pAssetsEditor->AssetsManager()->GetAssetValue<int>(
 			m_pAssetsEditor->GetEditedAssetPath(),
 			m_pAssetsEditor->GetFirstEditedSubPath(),
@@ -1270,6 +1268,11 @@ void CZoneTypeEdit::Update(bool ParentEnabled)
 			m_pAssetsEditor->GetFirstEditedSubPath(),
 			m_ZonePathMember,
 			CAssetPath::Null());
+
+		if(!AssetsManager()->IsValidPackage(m_pAssetsEditor->GetEditedPackageId()) || AssetsManager()->IsReadOnlyPackage(m_pAssetsEditor->GetEditedPackageId()) || m_ZoneTypeAssetPath.IsNull())
+			Editable(false);
+		else
+			Editable(true);
 
 		const CAsset_ZoneType *pZoneType = AssetsManager()->GetAsset<CAsset_ZoneType>(m_ZoneTypeAssetPath);
 		const CSubPath SubPath = CAsset_ZoneType::SubPath_Index(Index);
