@@ -263,6 +263,11 @@ private:
 		if(pBuffer == m_pBuffer)
 			return;
 
+		if (pBuffer == nullptr)
+		{
+			clear();
+			return;
+		}
 		int Size = str_length(pBuffer)+1;
 		if(Size > m_MaxSize)
 			resize_buffer(Size);
