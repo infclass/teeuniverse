@@ -908,11 +908,11 @@ const std::vector<int>* CViewMap::GetMemorizedZoneData(const CAssetPath& AssetPa
 
 void CViewMap::CCursorTool::ApplyGridAlignment(vec2 *pPoint, const vec2 &Offset) const
 {
-	if(m_pViewMap->GetGridAlign())
+	bool HalfStepAlignment = Input()->KeyIsPressed(KEY_LSHIFT);
+	if(m_pViewMap->GetGridAlign() || HalfStepAlignment)
 	{
 		vec2 AlignedPoint = *pPoint;
 		AlignedPoint -= Offset;
-		bool HalfStepAlignment = Input()->KeyIsPressed(KEY_LSHIFT);
 		AlignedPoint = m_pViewMap->MapRenderer()->MapPosToTilePos(AlignedPoint);
 		int Factor = 1;
 		if(HalfStepAlignment)
