@@ -250,15 +250,15 @@ void str_append(char *dst, const char *src, int dst_size);
  */
 void str_append_num(char *dst, const char *src, int dst_size, int num);
 
-//String contained in a rezisable array
+//String contained in a resizable array
 template<int INITIALSIZE>
 class _dynamic_string
 {
 private:
-	char* m_pBuffer;
-	int m_MaxSize;
+	char* m_pBuffer{};
+	int m_MaxSize{};
 	
-	inline void copy(const char* pBuffer)
+	void copy(const char* pBuffer)
 	{
 		if(pBuffer == m_pBuffer)
 			return;
@@ -275,13 +275,13 @@ private:
 		str_copy(m_pBuffer, pBuffer, m_MaxSize);
 	}
 	
-	inline void copy(const _dynamic_string& s)
+	void copy(const _dynamic_string& s)
 	{
 		resize_buffer(s.m_MaxSize);
 		str_copy(m_pBuffer, s.m_pBuffer, m_MaxSize);
 	}
 	
-	inline void transfert(_dynamic_string& s)
+	void transfert(_dynamic_string& s)
 	{
 		if(m_pBuffer)
 			delete[] m_pBuffer;
@@ -293,34 +293,26 @@ private:
 	}
 
 public:
-	_dynamic_string() :
-		m_pBuffer(NULL),
-		m_MaxSize(0)
+	_dynamic_string()
 	{
 		resize_buffer(INITIALSIZE);
 	}
-	
-	explicit _dynamic_string(const char* pText) :
-		m_pBuffer(NULL),
-		m_MaxSize(0)
+
+	explicit _dynamic_string(const char *pText)
 	{
 		copy(pText);
 	}
-	
-	_dynamic_string(const _dynamic_string& s) :
-		m_pBuffer(NULL),
-		m_MaxSize(0)
+
+	_dynamic_string(const _dynamic_string &s)
 	{
 		copy(s);
 	}
-	
-	explicit _dynamic_string(_dynamic_string&& s) :
-		m_pBuffer(NULL),
-		m_MaxSize(0)
+
+	explicit _dynamic_string(_dynamic_string &&s)
 	{
 		transfert(s);
 	}
-	
+
 	~_dynamic_string()
 	{
 		if(m_pBuffer)
@@ -363,11 +355,11 @@ public:
 		}
 	}
 
-	inline char* buffer() { return m_pBuffer; }
-	inline const char* buffer() const { return m_pBuffer; }
-	inline int maxsize() const { return m_MaxSize; }
+	char* buffer() { return m_pBuffer; }
+	const char* buffer() const { return m_pBuffer; }
+	int maxsize() const { return m_MaxSize; }
 	
-	inline int append_at(int Pos, const char* pBuffer)
+	int append_at(int Pos, const char* pBuffer)
 	{
 		int BufferSize = str_length(pBuffer);
 		int Size = Pos+BufferSize+1;
@@ -385,7 +377,7 @@ public:
 		return min(Pos + BufferSize, m_MaxSize-1);
 	}
 	
-	inline int append_at_num(int Pos, const char* pBuffer, int Num)
+	int append_at_num(int Pos, const char* pBuffer, int Num)
 	{
 		int Size = Pos+Num+1;
 		if(Size > m_MaxSize)
@@ -402,7 +394,7 @@ public:
 		return min(Pos + Num, m_MaxSize-1);
 	}
 	
-	inline void insert_at(int Pos, const char* pBuffer)
+	void insert_at(int Pos, const char* pBuffer)
 	{
 		int Length = str_length(m_pBuffer);
 		int BufferSize = str_length(pBuffer);
@@ -423,14 +415,14 @@ public:
 		m_pBuffer[Length+BufferSize] = 0;
 	}
 	
-	inline int length() const { return str_length(m_pBuffer); }
-	inline void clear() { m_pBuffer[0] = 0; }
-	inline bool empty() const { return (m_pBuffer[0] == 0); }
+	int length() const { return str_length(m_pBuffer); }
+	void clear() { m_pBuffer[0] = 0; }
+	bool empty() const { return (m_pBuffer[0] == 0); }
 	
-	inline void append(const _dynamic_string& String) { append_at(length(), String.buffer()); }
-	inline void append(const char* pBuffer) { append_at(length(), pBuffer); }
-	inline void append(const _dynamic_string& String, int num) { append_at_num(length(), String.buffer(), num); }
-	inline void append(const char* pBuffer, int num) { append_at_num(length(), pBuffer, num); }
+	void append(const _dynamic_string& String) { append_at(length(), String.buffer()); }
+	void append(const char* pBuffer) { append_at(length(), pBuffer); }
+	void append(const _dynamic_string& String, int num) { append_at_num(length(), String.buffer(), num); }
+	void append(const char* pBuffer, int num) { append_at_num(length(), pBuffer, num); }
 	bool operator<(const char* buffer) const
 	{
 		return (str_comp(m_pBuffer, buffer) < 0);
