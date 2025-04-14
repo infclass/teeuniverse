@@ -78,6 +78,25 @@ char char_lower(char c)
 
 /* FOREIGN CODE BEGIN: TeeWorlds **************************************/
 
+/* case */
+int str_comp_nocase(const char *a, const char *b)
+{
+#if defined(CONF_FAMILY_WINDOWS)
+	return _stricmp(a, b);
+#else
+	return strcasecmp(a, b);
+#endif
+}
+
+int str_comp_nocase_num(const char *a, const char *b, int num)
+{
+#if defined(CONF_FAMILY_WINDOWS)
+	return _strnicmp(a, b, num);
+#else
+	return strncasecmp(a, b, num);
+#endif
+}
+
 int str_comp(const char *a, const char *b)
 {
 	return strcmp(a, b);
@@ -130,6 +149,16 @@ void str_append_num(char *dst, const char *src, int dst_size, int num)
 	}
 
 	dst[dst_size-1] = 0; /* assure null termination */
+}
+
+void str_truncate(char *dst, int dst_size, const char *src, int truncation_len)
+{
+	int size = dst_size;
+	if(truncation_len < size)
+	{
+		size = truncation_len + 1;
+	}
+	str_copy(dst, src, size);
 }
 
 int str_length(const char *str)
@@ -300,6 +329,72 @@ const char *str_find_nocase(const char *haystack, const char *needle)
 
 int str_to_int(const char *str) { return atoi(str); }
 int str_to_int_base(const char *str, int base)  { return strtol(str, nullptr, base); }
+
+const char *str_startswith_nocase(const char *str, const char *prefix)
+{
+	int prefixl = str_length(prefix);
+	if(str_comp_nocase_num(str, prefix, prefixl) == 0)
+	{
+		return str + prefixl;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+const char *str_startswith(const char *str, const char *prefix)
+{
+	int prefixl = str_length(prefix);
+	if(str_comp_num(str, prefix, prefixl) == 0)
+	{
+		return str + prefixl;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+const char *str_endswith_nocase(const char *str, const char *suffix)
+{
+	int strl = str_length(str);
+	int suffixl = str_length(suffix);
+	const char *strsuffix;
+	if(strl < suffixl)
+	{
+		return nullptr;
+	}
+	strsuffix = str + strl - suffixl;
+	if(str_comp_nocase(strsuffix, suffix) == 0)
+	{
+		return strsuffix;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+const char *str_endswith(const char *str, const char *suffix)
+{
+	int strl = str_length(str);
+	int suffixl = str_length(suffix);
+	const char *strsuffix;
+	if(strl < suffixl)
+	{
+		return nullptr;
+	}
+	strsuffix = str + strl - suffixl;
+	if(str_comp(strsuffix, suffix) == 0)
+	{
+		return strsuffix;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
 
 /* FOREIGN CODE END: TeeWorlds ****************************************/
 

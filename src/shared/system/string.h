@@ -45,6 +45,22 @@ char char_lower(char c);
 
 /* FOREIGN CODE BEGIN: TeeWorlds **************************************/
 
+/**
+ * Truncates a string to a given length.
+ *
+ * @ingroup Strings
+ *
+ * @param dst Pointer to a buffer that shall receive the string.
+ * @param dst_size Size of the buffer dst.
+ * @param src String to be truncated.
+ * @param truncation_len Maximum length of the returned string (not
+ * counting the zero termination).
+ *
+ * @remark The strings are treated as zero-terminated strings.
+ * @remark Guarantees that dst string will contain zero-termination.
+ */
+void str_truncate(char *dst, int dst_size, const char *src, int truncation_len);
+
 /*
 	Function: str_length
 		Returns the length of a zero terminated string.
@@ -207,11 +223,54 @@ const char *str_find_nocase(const char *haystack, const char *needle);
 /* FOREIGN CODE END: TeeWorlds ****************************************/
 
 /**
- * Case sensitive comparison between strings
- * @param a the first string to compare
- * @param b the second string to compare
- * @return the function return 0 is both strings are equal, and <0 (>0)
- * 	if the first string is lesser (greater) than the second one.
+ * Compares to strings case insensitively.
+ *
+ * @ingroup Strings
+ *
+ * @param a String to compare.
+ * @param b String to compare.
+ *
+ * @return `< 0` - String a is less than string b
+ * @return `0` - String a is equal to string b
+ * @return `> 0` - String a is greater than string b
+ *
+ * @remark Only guaranteed to work with a-z/A-Z.
+ * @remark The strings are treated as zero-terminated strings.
+ */
+int str_comp_nocase(const char *a, const char *b);
+
+/**
+ * Compares up to num characters of two strings case insensitively.
+ *
+ * @ingroup Strings
+ *
+ * @param a String to compare.
+ * @param b String to compare.
+ * @param num Maximum characters to compare
+ *
+ * @return `< 0` - String a is less than string b
+ * @return `0` - String a is equal to string b
+ * @return `> 0` - String a is greater than string b
+ *
+ * @remark Only guaranteed to work with a-z/A-Z.
+ * (use str_utf8_comp_nocase_num for unicode support)
+ * @remark The strings are treated as zero-terminated strings.
+ */
+int str_comp_nocase_num(const char *a, const char *b, int num);
+
+/**
+ * Compares two strings case sensitive.
+ *
+ * @ingroup Strings
+ *
+ * @param a String to compare.
+ * @param b String to compare.
+ *
+ * @return `< 0` - String a is less than string b
+ * @return `0` - String a is equal to string b
+ * @return `> 0` - String a is greater than string b
+ *
+ * @remark The strings are treated as zero-terminated strings.
  */
 int str_comp(const char *a, const char *b);
 
@@ -249,6 +308,27 @@ void str_append(char *dst, const char *src, int dst_size);
  * @param num the maximum number of character to append
  */
 void str_append_num(char *dst, const char *src, int dst_size, int num);
+
+const char *str_startswith_nocase(const char *str, const char *prefix);
+
+/**
+ * Checks case sensitive whether the string begins with a certain prefix.
+ *
+ * @ingroup Strings
+ *
+ * @param str String to check.
+ * @param prefix Prefix to look for.
+ *
+ * @return A pointer to the string str after the string prefix, or 0 if
+ *		   the string prefix isn't a prefix of the string str.
+ *
+ * @remark The strings are treated as zero-terminated strings.
+ */
+const char *str_startswith(const char *str, const char *prefix);
+
+const char *str_endswith_nocase(const char *str, const char *suffix);
+
+const char *str_endswith(const char *str, const char *suffix);
 
 //String contained in a resizable array
 template<int INITIALSIZE>
