@@ -130,7 +130,9 @@ public:
 		}
 		return m_aInputEvents[Index];
 	}
-	
+
+	dynamic_string m_DroppedFilePath;
+
 	//quick access to input
 	unsigned short m_aInputCount[g_MaxKeys];	// tw-KEY
 	unsigned char m_aInputState[g_MaxKeys];	// SDL_SCANCODE

@@ -341,6 +341,8 @@ public:
 	inline CSubPath GetFirstEditedSubPath() const { return (m_EditedSubPathes.size() > 0 ? m_EditedSubPathes[0] : CSubPath::Null()); }
 	inline CSubPath GetUniqueEditedSubPath() const { return (m_EditedSubPathes.size() == 1 ? m_EditedSubPathes[0] : CSubPath::Null()); }
 	inline const std::vector<CSubPath>& GetEditedSubPathes() const { return m_EditedSubPathes; }
+
+	void ImportDroppedFile(const char *pFilePath);
 	
 	inline int64_t GetTime() const { return m_Time; }
 	inline void SetTime(int64_t Time) { m_Time = Time; }

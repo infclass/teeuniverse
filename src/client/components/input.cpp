@@ -272,7 +272,15 @@ bool CInput::PreUpdate()
 							break;
 					}
 					break;
-				
+
+				case SDL_DROPFILE:
+					if(Event.drop.type == SDL_DROPFILE)
+					{
+						m_DroppedFilePath = Event.drop.file;
+						SDL_free(Event.drop.file);
+					}
+					break;
+
 				// other messages
 				case SDL_QUIT:
 					return false;

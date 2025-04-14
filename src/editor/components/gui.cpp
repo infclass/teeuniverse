@@ -2396,6 +2396,12 @@ bool CGuiEditor::PreUpdate()
 	{
 		m_Time += ElapsedTime * m_TimeSpeed;
 	}
+
+	if (!Input()->m_DroppedFilePath.empty())
+	{
+		ImportDroppedFile(Input()->m_DroppedFilePath.buffer());
+		Input()->m_DroppedFilePath.clear();
+	}
 	
 	return true;
 }
@@ -2869,6 +2875,11 @@ void CGuiEditor::RemoveEditedSubPath(const CSubPath& SubPath)
 		else
 			Iter++;
 	}
+}
+
+void CGuiEditor::ImportDroppedFile(const char *pFilePath)
+{
+	DisplayPopup(new CErrorDialog(this, _LSTRING("Unable to import file")));
 }
 
 void CGuiEditor::QueuePackageTreeRefresh()
