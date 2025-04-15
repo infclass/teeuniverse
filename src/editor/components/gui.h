@@ -343,6 +343,7 @@ public:
 	inline const std::vector<CSubPath>& GetEditedSubPathes() const { return m_EditedSubPathes; }
 
 	void ImportDroppedFile(const char *pFilePath);
+	void ImportPngFile(const char *pFilePath);
 	
 	inline int64_t GetTime() const { return m_Time; }
 	inline void SetTime(int64_t Time) { m_Time = Time; }

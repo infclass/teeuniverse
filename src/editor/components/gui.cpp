@@ -2879,7 +2879,46 @@ void CGuiEditor::RemoveEditedSubPath(const CSubPath& SubPath)
 
 void CGuiEditor::ImportDroppedFile(const char *pFilePath)
 {
-	DisplayPopup(new CErrorDialog(this, _LSTRING("Unable to import file")));
+	if(str_endswith_nocase(pFilePath, ".png"))
+	{
+		ImportPngFile(pFilePath);
+	}
+	else
+	{
+		DisplayPopup(new CErrorDialog(this, _LSTRING("Unable to import file")));
+	}
+}
+
+void CGuiEditor::ImportPngFile(const char *pFilePath)
+{
+	const int PackageId = GetEditedPackageId();
+
+	if(!AssetsManager()->IsValidPackage(PackageId) || AssetsManager()->IsReadOnlyPackage(PackageId))
+	{
+		DisplayPopup(new CErrorDialog(this, _LSTRING("Unable add an image without an active editable package")));
+		return;
+	}
+
+	const char *pFileName = fs_filename(pFilePath);
+	char aName[256];
+	fs_split_file_extension(pFileName, aName, sizeof(aName));
+
+	CAssetPath ImagePath = CreateNewImage(
+		SharedKernel(),
+		GetEditedPackageId(),
+		aName,
+		pFilePath,
+		CStorage::TYPE_ABSOLUTE,
+		-1, -1);
+
+	if(ImagePath.IsNull())
+	{
+		DisplayPopup(new CErrorDialog(this, _LSTRING("The image can't be loaded")));
+		return;
+	}
+
+	SetEditedAsset(ImagePath, CSubPath::Null());
+	RefreshAssetsTree();
 }
 
 void CGuiEditor::QueuePackageTreeRefresh()
