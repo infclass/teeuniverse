@@ -1,5 +1,18 @@
 # Change Log
 
+## [0.3.4] - 20xx-xx-xx
+### Added
+- Added 'drag and drop' support for `.png`, `.map`, and `.tup` files
+- Added half-step alignment if LSHIFT pressed (regardless of active alignment mode)
+
+### Changed
+- Removed .tup version selection ComboBox for OpenFile dialog
+
+### Fixed
+- Fixed a crash on null ZoneType index editing
+- Fixed a possible crash on operation with text strings
+- Fixed export of empty object layers (critical for DDNet v19.2+)
+
 ## [0.3.3] - 2024-07-10
 ### Added
 - Inspector displays zone subtype name instead of index
