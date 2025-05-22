@@ -29,7 +29,7 @@ class CAbstractScrollBar : public CWidget
 protected:
 	int m_ViewSize;
 	int m_ContentSize;
-	float m_ContentPos;
+	int m_ContentPos;
 	
 	bool m_Clicked;
 	int m_ClickShift;
@@ -48,6 +48,7 @@ public:
 	void OnWheelUp();
 	void OnWheelDown();
 	int GetContentPos() const;
+	void SetContentPos(int Pos);
 	
 	void SetScrollbarStyle(CAssetPath ScrollbarStylePath) { m_ScrollbarStylePath = ScrollbarStylePath; }
 	CAssetPath GetScrollbarStyle() const { return m_ScrollbarStylePath; }

@@ -30,7 +30,7 @@ CAbstractScrollBar::CAbstractScrollBar(CGui *pContext) :
 	CWidget(pContext),
 	m_ViewSize(0),
 	m_ContentSize(0),
-	m_ContentPos(0.0f),
+	m_ContentPos(0),
 	m_Clicked(false),
 	m_ClickShift(0)
 {
@@ -70,27 +70,28 @@ void CAbstractScrollBar::OnButtonRelease(int Button)
 
 void CAbstractScrollBar::OnWheelDown()
 {
-	m_ContentPos += 100.0f;
-	
-	if(m_ContentPos < 0)
-		m_ContentPos = 0;
-	if(m_ContentPos + m_ViewSize > m_ContentSize)
-		m_ContentPos = m_ContentSize - m_ViewSize;
+	SetContentPos(m_ContentPos + 100);
 }
 
 void CAbstractScrollBar::OnWheelUp()
 {
-	m_ContentPos -= 100.0f;
-	
-	if(m_ContentPos < 0)
-		m_ContentPos = 0;
-	if(m_ContentPos + m_ViewSize > m_ContentSize)
-		m_ContentPos = m_ContentSize - m_ViewSize;
+	SetContentPos(m_ContentPos - 100);
 }
 
 int CAbstractScrollBar::GetContentPos() const
 {
 	return m_ContentPos;
+}
+
+void CAbstractScrollBar::SetContentPos(int Pos)
+{
+	if(Pos < 0)
+		Pos = 0;
+
+	if(Pos + m_ViewSize > m_ContentSize)
+		Pos = m_ContentSize - m_ViewSize;
+
+	m_ContentPos = Pos;
 }
 
 /* H SCROLLBAR *************************************************/
