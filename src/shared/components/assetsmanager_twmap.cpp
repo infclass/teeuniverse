@@ -1847,7 +1847,18 @@ void CAssetsManager::Save_Map_Group(
 			LItem.m_Layer.m_Flags = (pLayer->GetLevelOfDetail() > 0 ? ddnet::LAYERFLAG_DETAIL : 0x0);
 			LItem.m_Image = -1;
 			LItem.m_NumQuads = pLayer->GetQuadArraySize();
-			LItem.m_Data = ArchiveFile.AddDataSwapped(pLayer->GetQuadArraySize()*sizeof(ddnet::CQuad), pQuads);
+			if(LItem.m_NumQuads != 0)
+			{
+				LItem.m_Data = ArchiveFile.AddDataSwapped(LItem.m_NumQuads * sizeof(ddnet::CQuad), pQuads);
+			}
+			else
+			{
+				// add dummy data for backwards compatibility
+				// this allows the layer to be loaded with an empty array since m_NumQuads is 0 while saving
+				CQuad Dummy{};
+				LItem.m_Data = ArchiveFile.AddDataSwapped(sizeof(CQuad), &Dummy);
+			}
+
 			StrToInts(LItem.m_aName, sizeof(LItem.m_aName)/sizeof(int), pLayer->GetName());
 			
 			const CAsset_Image* pImage = GetAsset<CAsset_Image>(pLayer->GetImagePath());
