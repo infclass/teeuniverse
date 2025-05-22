@@ -293,6 +293,23 @@ int str_comp_num(const char *a, const char *b, int num);
 void str_copy(char *dst, const char *src, int dst_size);
 
 /**
+ * Copies a string to a fixed-size array of chars.
+ *
+ * @ingroup Strings
+ *
+ * @param dst Array that shall receive the string.
+ * @param src String to be copied.
+ *
+ * @remark The strings are treated as null-terminated strings.
+ * @remark Guarantees that dst string will contain null-termination.
+ */
+template<int N>
+void str_copy(char (&dst)[N], const char *src)
+{
+	str_copy(dst, src, N);
+}
+
+/**
  * Appends a string to another
  * @param dst pointer to a buffer that contains a string
  * @param src string to append
