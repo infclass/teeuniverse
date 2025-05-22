@@ -42,6 +42,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <cassert>
+
 /* COMMANDS ***********************************************************/
 
 class CSaveConfirmationDialog : public CConfirmationDialog
@@ -2883,6 +2885,10 @@ void CGuiEditor::ImportDroppedFile(const char *pFilePath)
 	{
 		ImportPngFile(pFilePath);
 	}
+	else if(str_endswith_nocase(pFilePath, ".map"))
+	{
+		ImportTeeworldsMapFile(pFilePath);
+	}
 	else
 	{
 		DisplayPopup(new CErrorDialog(this, _LSTRING("Unable to import file")));
@@ -2919,6 +2925,26 @@ void CGuiEditor::ImportPngFile(const char *pFilePath)
 
 	SetEditedAsset(ImagePath, CSubPath::Null());
 	RefreshAssetsTree();
+}
+
+void CGuiEditor::ImportTeeworldsMapFile(const char *pFilePath)
+{
+	char aDirPath[256];
+	str_copy(aDirPath, pFilePath);
+	char *pLastDot = strrchr(aDirPath, '.');
+	assert(pLastDot);
+	*pLastDot = '\0';
+
+	const char *pFileName = fs_filename(aDirPath);
+	std::size_t FileNameOffset = pFileName - &aDirPath[0];
+	assert(FileNameOffset > 0);
+	aDirPath[FileNameOffset - 1] = '\0';
+
+	auto *pDialog = new COpenSavePackageDialog(this, COpenSavePackageDialog::MODE_OPEN, COpenSavePackageDialog::FORMAT_MAP_TW);
+	pDialog->SelectDirectory(aDirPath);
+	pDialog->SelectName(pFileName);
+
+	DisplayPopup(pDialog);
 }
 
 void CGuiEditor::QueuePackageTreeRefresh()
