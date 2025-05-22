@@ -545,6 +545,14 @@ int CDataFileWriter::AddDataSwapped(int Size, const void *pData)
 #endif
 }
 
+int CDataFileWriter::AddDataString(const char *pStr)
+{
+	assert(pStr != nullptr);
+
+	if(pStr[0] == '\0')
+		return -1;
+	return AddData(str_length(pStr) + 1, pStr);
+}
 
 int CDataFileWriter::Finish()
 {

@@ -125,6 +125,7 @@ public:
 	bool Open(class CStorage *pStorage, int StorageType, const char *Filename);
 	int AddData(int Size, const void *pData);
 	int AddDataSwapped(int Size, const void *pData);
+	int AddDataString(const char *pStr);
 	int AddItem(int Type, int ID, int Size, const void *pData);
 	int Finish();
 };

@@ -2097,21 +2097,26 @@ bool CAssetsManager::Save_Map(const char* pFileName, int StorageType, int Packag
 	bool EntityGroupNeeded = false;
 	std::vector<CAsset_MapEntities::CEntity> PTUMTeeWorldsEntities;
 	std::vector<CAssetPath> ZoneLayers;
-	
-	//Map version
-	ddnet::CMapItemVersion VerItem;
-	VerItem.m_Version = 1;
-	ArchiveFile.AddItem(ddnet::MAPITEMTYPE_VERSION, 0, sizeof(ddnet::CMapItemVersion), &VerItem);
-	
-	//Map info
-	ddnet::CMapItemInfo InfoItem;
-	InfoItem.m_Version = 1;
-	InfoItem.m_MapVersion = ArchiveFile.AddData(str_length(GetPackageVersion(PackageId))+1, GetPackageVersion(PackageId));
-	InfoItem.m_Author = ArchiveFile.AddData(str_length(GetPackageAuthor(PackageId))+1, GetPackageAuthor(PackageId));
-	InfoItem.m_Credits = ArchiveFile.AddData(str_length(GetPackageCredits(PackageId))+1, GetPackageCredits(PackageId));
-	InfoItem.m_License = ArchiveFile.AddData(str_length(GetPackageLicense(PackageId))+1, GetPackageLicense(PackageId));
-	ArchiveFile.AddItem(ddnet::MAPITEMTYPE_INFO, 0, sizeof(ddnet::CMapItemInfo), &InfoItem);
-	
+
+	// save version
+	{
+		ddnet::CMapItemVersion Item;
+		Item.m_Version = 1;
+		ArchiveFile.AddItem(ddnet::MAPITEMTYPE_VERSION, 0, sizeof(Item), &Item);
+	}
+
+	// save map info
+	{
+		ddnet::CMapItemInfo Item;
+		Item.m_Version = 1;
+		Item.m_Author = ArchiveFile.AddDataString(GetPackageAuthor(PackageId));
+		Item.m_MapVersion = ArchiveFile.AddDataString(GetPackageVersion(PackageId));
+		Item.m_Credits = ArchiveFile.AddDataString(GetPackageCredits(PackageId));
+		Item.m_License = ArchiveFile.AddDataString(GetPackageLicense(PackageId));
+
+		ArchiveFile.AddItem(ddnet::MAPITEMTYPE_INFO, 0, sizeof(Item), &Item);
+	}
+
 	int GroupId = 0;
 	int LayerId = 0;
 		
