@@ -423,6 +423,7 @@ public:
 	class CFunctionalAbstractTextEdit *m_pDirectoryEditor = nullptr;
 	int m_Format;
 	int m_Mode;
+	int m_CurrentItemIndex = -1;
 	bool m_RefreshList;
 	bool m_ReadOnly;
 	bool m_ShowHiddenFiles;
@@ -438,6 +439,7 @@ public:
 	void Open();
 	
 	void Update(bool ParentEnabled) override;
+	void UpdatePosition(const gui::CRect &BoundingRect, const gui::CRect &VisibilityRect) override;
 	int GetInputToBlock() override { return CGui::BLOCKEDINPUT_ALL; }
 
 protected:

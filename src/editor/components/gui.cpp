@@ -805,6 +805,7 @@ COpenSavePackageDialog::COpenSavePackageDialog(CGuiEditor* pAssetsEditor, int Mo
 	m_pFilelist(nullptr),
 	m_Format(Format),
 	m_Mode(Mode),
+	m_CurrentItemIndex(-1),
 	m_RefreshList(true),
 	m_ReadOnly(false),
 	m_ShowHiddenFiles(false)
@@ -1080,6 +1081,16 @@ void COpenSavePackageDialog::Update(bool ParentEnabled)
 	gui::CPopup::Update(ParentEnabled);
 }
 
+void COpenSavePackageDialog::UpdatePosition(const gui::CRect &BoundingRect, const gui::CRect &VisibilityRect)
+{
+	gui::CPopup::UpdatePosition(BoundingRect, VisibilityRect);
+	if(m_CurrentItemIndex >= 0)
+	{
+		m_pFilelist->PositionViewAtIndex(m_CurrentItemIndex);
+		m_CurrentItemIndex = -1;
+	}
+}
+
 void COpenSavePackageDialog::SetDirectory(const char *pDirectory)
 {
 	m_Directory = pDirectory;
@@ -1198,6 +1209,7 @@ void COpenSavePackageDialog::ListFiles()
 	std::sort(Directories.begin(), Directories.end());
 	std::sort(Files.begin(), Files.end());
 	
+	m_CurrentItemIndex = -1;
 	for(unsigned int i=0; i<Directories.size(); i++)
 	{
 		const char* pName = Directories[i].buffer();
@@ -1207,7 +1219,13 @@ void COpenSavePackageDialog::ListFiles()
 		m_pFilelist->Add(new COpenSavePackageDialog_Item_Directory(this, pName, Directories[i].buffer()), false);
 	}
 	for(unsigned int i=0; i<Files.size(); i++)
+	{
+		if(m_Filename == Files[i])
+		{
+			m_CurrentItemIndex = static_cast<int>(m_pFilelist->Count());
+		}
 		m_pFilelist->Add(new COpenSavePackageDialog_Item_Load(this, Files[i].buffer()), false);
+	}
 	
 	delete pIter;
 }
