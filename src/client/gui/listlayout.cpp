@@ -62,6 +62,12 @@ void CAbstractListLayout::Add(CWidget* pWidget, bool Fill, int MinSize)
 	Child.m_MinSize = MinSize;
 }
 
+CWidget *CAbstractListLayout::At(std::size_t Index)
+{
+	assert(Index < m_Childs.size());
+	return m_Childs.at(Index).m_pWidget;
+}
+
 void CAbstractListLayout::Update(bool ParentEnabled)
 {
 	for(unsigned int i=0; i<m_Childs.size(); i++)
@@ -608,4 +614,21 @@ void CVScrollLayout::OnInputEvent(const CInput::CEvent& Event)
 	CVListLayout::OnInputEvent(Event);
 }
 
+void CVScrollLayout::PositionViewAtIndex(std::size_t Index)
+{
+	CWidget *pWidget = At(Index);
+	int WantedAbsY = m_DrawRect.y + m_DrawRect.h / 2;
+	int ItemAbsY = pWidget->GetDrawRect().y;
+
+	SetContentPosition(ItemAbsY - WantedAbsY);
 }
+
+void CVScrollLayout::SetContentPosition(int Pos)
+{
+	if(m_pScrollBar == nullptr)
+		return;
+
+	m_pScrollBar->SetContentPos(Pos);
+}
+
+} // namespace gui

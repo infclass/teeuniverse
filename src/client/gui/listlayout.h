@@ -63,6 +63,8 @@ public:
 	
 	void Clear();
 	void Add(CWidget* pWidget, bool Fill = false, int MinSize = 0);
+	CWidget *At(std::size_t Index);
+	std::size_t Count() const { return m_Childs.size(); }
 	
 	void SetBoxStyle(CAssetPath BoxStylePath) { m_BoxStylePath = BoxStylePath; }
 	CAssetPath GetBoxStyle() const { return m_BoxStylePath; }
@@ -129,6 +131,10 @@ public:
 	virtual void OnButtonClick(int Button);
 	virtual void OnButtonRelease(int Button);
 	virtual void OnInputEvent(const CInput::CEvent& Event);
+
+	void PositionViewAtIndex(std::size_t Index);
+
+	void SetContentPosition(int Pos);
 };
 
 }

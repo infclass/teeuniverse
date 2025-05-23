@@ -67,6 +67,7 @@ public:
 	virtual void OnEnableDisable() {};
 		
 	inline const CRect& GetBS() const { return m_BoundingSizeRect; }
+	CRect GetDrawRect() const { return m_DrawRect; }
 	
 	inline void Disable() { m_Disabled = true; OnEnableDisable(); }
 	inline void Enable() { m_Disabled = false; OnEnableDisable(); }
