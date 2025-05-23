@@ -345,6 +345,7 @@ public:
 	void ImportDroppedFile(const char *pFilePath);
 	void ImportPngFile(const char *pFilePath);
 	void ImportTeeworldsMapFile(const char *pFilePath);
+	void OpenPackageFile(const char *pFilePath);
 	
 	inline int64_t GetTime() const { return m_Time; }
 	inline void SetTime(int64_t Time) { m_Time = Time; }

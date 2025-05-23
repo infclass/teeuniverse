@@ -1384,30 +1384,11 @@ void COpenSavePackageDialog::Open()
 		}
 		case FORMAT_PACKAGE:
 		{
-			CErrorStack ErrorStack;
-			
 			TextIter = Buffer.append_at(TextIter, m_Directory.buffer());
 			TextIter = Buffer.append_at(TextIter, "/");
 			TextIter = Buffer.append_at(TextIter, m_Filename.buffer());
 			TextIter = Buffer.append_at(TextIter, ".tup");
-			int PackageId = AssetsManager()->Load_AssetsFile(Buffer.buffer(), &ErrorStack);
-			
-			if(PackageId < 0 || ErrorStack.Size())
-				m_pAssetsEditor->DisplayPopup(new CErrorDialog(m_pAssetsEditor, _LSTRING("The package can't be loaded properly"), ErrorStack));
-			
-			if(PackageId >= 0)
-			{
-				m_pAssetsEditor->SetEditedPackage(PackageId);
-				
-				//Search for maps
-				if(AssetsManager()->GetNumAssets<CAsset_Map>(PackageId))
-					m_pAssetsEditor->SetEditedAsset(CAssetPath(CAsset_Map::TypeId, PackageId, 0), CSubPath::Null());
-				
-				if(!m_ReadOnly)
-					AssetsManager()->SetPackageReadOnly(PackageId, false);
-				
-				m_pAssetsEditor->RefreshAssetsTree();
-			}
+			m_pAssetsEditor->OpenPackageFile(Buffer.buffer());
 			break;
 		}
 	}
@@ -2963,6 +2944,29 @@ void CGuiEditor::ImportTeeworldsMapFile(const char *pFilePath)
 	pDialog->SelectName(pFileName);
 
 	DisplayPopup(pDialog);
+}
+
+void CGuiEditor::OpenPackageFile(const char *pFilePath)
+{
+	CErrorStack ErrorStack;
+	int PackageId = AssetsManager()->Load_AssetsFile(pFilePath, &ErrorStack);
+
+	if(PackageId < 0 || ErrorStack.Size())
+		DisplayPopup(new CErrorDialog(this, _LSTRING("The package can't be loaded properly"), ErrorStack));
+
+	if(PackageId >= 0)
+	{
+		SetEditedPackage(PackageId);
+
+		//Search for maps
+		if(AssetsManager()->GetNumAssets<CAsset_Map>(PackageId))
+			SetEditedAsset(CAssetPath(CAsset_Map::TypeId, PackageId, 0), CSubPath::Null());
+
+		AssetsManager()->SetPackageReadOnly(PackageId, false);
+
+		RefreshAssetsTree();
+		RefreshPackageTree();
+	}
 }
 
 void CGuiEditor::QueuePackageTreeRefresh()
