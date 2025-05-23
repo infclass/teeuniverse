@@ -2888,6 +2888,10 @@ void CGuiEditor::ImportDroppedFile(const char *pFilePath)
 	{
 		ImportTeeworldsMapFile(pFilePath);
 	}
+	else if(str_endswith_nocase(pFilePath, ".tup"))
+	{
+		OpenPackageFile(pFilePath);
+	}
 	else
 	{
 		DisplayPopup(new CErrorDialog(this, _LSTRING("Unable to import file")));
