@@ -2108,7 +2108,7 @@ public:
 				gui::CHListLayout* pList = new gui::CHListLayout(Context());
 				pLayout->Add(pList, true);
 				pList->Add(new gui::CLabel(Context(), _LSTRING("Copyright ©:")), true);
-				pList->Add(new gui::CLabel(Context(), "2017 necropotame, 2019-2022 Kaffeine"), true);
+				pList->Add(new gui::CLabel(Context(), "2017 necropotame, 2019-2025 Kaffeine"), true);
 			}
 			
 			pLayout->AddSeparator();
